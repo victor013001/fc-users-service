@@ -1,0 +1,112 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    mapstructVersion = "1.5.3.Final"
+    lombokVersion = "1.18.24"
+    lombokMapstructBindingVersion = "0.2.0"
+    openApiVersion = "2.8.8"
+}
+
+dependencies {
+    //SPRING
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:${openApiVersion}'
+
+    //DATABASE
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //EXTERNAL
+    implementation 'org.mapstruct:mapstruct:${mapstructVersion}'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:${mapstructVersion}'
+    annotationProcessor 'org.projectlombok:lombok:${lombokVersion}'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}'
+    compileOnly 'org.projectlombok:lombok:${lombokVersion}'
+
+    //TESTING
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy('jacocoTestReport')
+}
+
+def jacocoExcludes = [
+        '**/entity/**',
+        '**/dto/**',
+        '**/model/**',
+        '**/exceptions/**',
+        '**/constants/**',
+        '**/config/**',
+        '**/enums/**',
+        '**/util/**',
+]
+
+def mainClassDirsProvider = layout.buildDirectory.dir("classes/java/main").map { dir ->
+    fileTree(dir) {
+        exclude jacocoExcludes
+    }
+}
+
+tasks.named('jacocoTestReport') {
+    dependsOn('test')
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+    classDirectories.setFrom(mainClassDirsProvider)
+}
+
+tasks.named('jacocoTestCoverageVerification') {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
+    }
+    classDirectories.setFrom(mainClassDirsProvider)
+}
+
+tasks.register('verify') {
+    dependsOn('test')
+    dependsOn('jacocoTestCoverageVerification')
+}
+
+tasks.named('build') {
+    dependsOn('verify')
+}
