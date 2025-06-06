@@ -1,10 +1,10 @@
-package com.example.non_reactive_archetype;
+package com.example.fc_users_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class NonReactiveArchetypeApplicationTests {
+class FCUsersServiceApplicationTests {
 
   @Test
   void contextLoads() {

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Non Reactive Archetype
+    name: FC Users Service
   datasource:
     driverClassName: org.mysql.Driver
     url: jdbc:${DB_ENGINE}://${DB_HOST}:${DB_PORT}/${DB_SCHEMA}
