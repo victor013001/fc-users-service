@@ -1,0 +1,10 @@
+package com.example.fc_users_service.infrastructure.adapters.persistence.repository;
+
+import com.example.fc_users_service.infrastructure.adapters.persistence.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+  boolean existsByEmail(String email);
+
+  boolean existsByDocumentNumber(String documentNumber);
+}
