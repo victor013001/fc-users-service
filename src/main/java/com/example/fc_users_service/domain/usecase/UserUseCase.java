@@ -1,0 +1,42 @@
+package com.example.fc_users_service.domain.usecase;
+
+import com.example.fc_users_service.domain.api.UserServicePort;
+import com.example.fc_users_service.domain.exceptions.standard_exception.BadRequest;
+import com.example.fc_users_service.domain.model.User;
+import com.example.fc_users_service.domain.spi.UserPersistencePort;
+import java.time.LocalDate;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public class UserUseCase implements UserServicePort {
+
+  private final UserPersistencePort userPersistencePort;
+
+  private final int ADULT_AGE = 18;
+
+  @Override
+  public void saveUser(User user, String roleName) {
+    validAdult(user.birthDate());
+    validDocumentNumber(user.documentNumber());
+    validEmail(user.email());
+    userPersistencePort.saveUser(user, roleName);
+  }
+
+  private void validEmail(String email) {
+    if (userPersistencePort.existsByEmail(email)) {
+      throw new BadRequest();
+    }
+  }
+
+  private void validDocumentNumber(Integer documentNumber) {
+    if (userPersistencePort.existsByDocumentNumber(documentNumber)) {
+      throw new BadRequest();
+    }
+  }
+
+  private void validAdult(LocalDate birthDate) {
+    if (!birthDate.isBefore(LocalDate.now().minusYears(ADULT_AGE))) {
+      throw new BadRequest();
+    }
+  }
+}

@@ -1,0 +1,26 @@
+package com.example.fc_users_service.application.service.hanlder;
+
+import com.example.fc_users_service.application.mapper.UserMapper;
+import com.example.fc_users_service.application.service.UserApplicationService;
+import com.example.fc_users_service.domain.api.UserServicePort;
+import com.example.fc_users_service.domain.enums.Roles;
+import com.example.fc_users_service.infrastructure.entrypoint.dto.UserRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class UserApplicationServiceHandler implements UserApplicationService {
+
+  private final UserMapper userMapper;
+  private final PasswordEncoder passwordEncoder;
+  private final UserServicePort userService;
+
+  @Override
+  public void createLandlord(UserRequest userRequest) {
+    String encodedPassword = passwordEncoder.encode(userRequest.password());
+    userService.saveUser(
+        userMapper.toModel(userRequest, encodedPassword), Roles.LANDLORD.getValue());
+  }
+}
