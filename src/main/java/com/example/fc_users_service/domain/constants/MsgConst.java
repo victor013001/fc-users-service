@@ -11,4 +11,5 @@ public class MsgConst {
       "The request could not be processed due to invalid or incomplete data.";
   public static final String SERVER_ERROR_MSG =
       "An unexpected server error occurred. Please try again later.";
+  public static final String AUTHENTICATED_SUCCESSFULLY_MSG = "Authenticated successfully.";
 }

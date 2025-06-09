@@ -24,6 +24,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +47,7 @@ public class UserController {
         @ApiResponse(responseCode = SERVER_ERROR, description = SERVER_ERROR_MSG),
       })
   @PostMapping(LANDLORD_BASE_PATH)
+  @PreAuthorize("hasAuthority('admin')")
   public ResponseEntity<DefaultServerResponse<String, StandardError>> createLandlord(
       @Valid @RequestBody final UserRequest userRequest) {
     userApplicationService.createLandlord(userRequest);
