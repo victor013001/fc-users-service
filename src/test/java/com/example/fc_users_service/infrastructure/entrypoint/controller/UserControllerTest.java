@@ -1,5 +1,6 @@
 package com.example.fc_users_service.infrastructure.entrypoint.controller;
 
+import static com.example.fc_users_service.domain.constants.RouterConst.CLIENT_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.EMPLOYEE_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
@@ -183,6 +184,38 @@ public class UserControllerTest {
                 .with(
                     SecurityMockMvcRequestPostProcessors.user("landlordUser")
                         .authorities(new SimpleGrantedAuthority("landlord")))
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void createClient_Success() throws Exception {
+    var userRequest = getValidUserRequest();
+
+    String requestJson = objectMapper.writeValueAsString(userRequest);
+
+    Mockito.doNothing().when(userApplicationService).createClient(any(UserRequest.class));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post(USER_BASE_PATH + CLIENT_BASE_PATH)
+                .content(requestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.data").value(USER_CREATED_SUCCESSFULLY.getMessage()))
+        .andExpect(jsonPath("$.error").doesNotExist());
+  }
+
+  @Test
+  public void createClient_BadRequest() throws Exception {
+    var userRequest = getInvalidUserRequest();
+
+    String requestJson = objectMapper.writeValueAsString(userRequest);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post(USER_BASE_PATH + CLIENT_BASE_PATH)
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());

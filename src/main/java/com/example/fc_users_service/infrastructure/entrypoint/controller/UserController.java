@@ -11,10 +11,13 @@ import static com.example.fc_users_service.domain.constants.MsgConst.LANDLORD_FO
 import static com.example.fc_users_service.domain.constants.MsgConst.SERVER_ERROR_MSG;
 import static com.example.fc_users_service.domain.constants.MsgConst.USER_ALREADY_EXISTS_MSG;
 import static com.example.fc_users_service.domain.constants.MsgConst.USER_CREATED_SUCCESSFULLY_MSG;
+import static com.example.fc_users_service.domain.constants.RouterConst.CLIENT_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.EMPLOYEE_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
+import static com.example.fc_users_service.domain.constants.SwaggerConst.CREATE_CLIENT_OPERATION;
+import static com.example.fc_users_service.domain.constants.SwaggerConst.CREATE_EMPLOYEE_OPERATION;
 import static com.example.fc_users_service.domain.constants.SwaggerConst.CREATE_LANDLORD_OPERATION;
 import static com.example.fc_users_service.domain.constants.SwaggerConst.EMAIL_BELONGS_TO_LANDLORD;
 import static com.example.fc_users_service.domain.enums.ServerResponses.USER_CREATED_SUCCESSFULLY;
@@ -95,7 +98,7 @@ public class UserController {
                 userApplicationService.doesEmailMatchLandlordId(landlordId), null));
   }
 
-  @Operation(summary = CREATE_LANDLORD_OPERATION)
+  @Operation(summary = CREATE_EMPLOYEE_OPERATION)
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = CREATED, description = USER_CREATED_SUCCESSFULLY_MSG),
@@ -108,6 +111,22 @@ public class UserController {
   public ResponseEntity<DefaultServerResponse<String, StandardError>> createEmployee(
       @Valid @RequestBody final UserRequest userRequest) {
     userApplicationService.createEmployee(userRequest);
+    return ResponseEntity.status(USER_CREATED_SUCCESSFULLY.getHttpStatus())
+        .body(new DefaultServerResponse<>(USER_CREATED_SUCCESSFULLY.getMessage(), null));
+  }
+
+  @Operation(summary = CREATE_CLIENT_OPERATION)
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = CREATED, description = USER_CREATED_SUCCESSFULLY_MSG),
+        @ApiResponse(responseCode = CONFLICT, description = USER_ALREADY_EXISTS_MSG),
+        @ApiResponse(responseCode = BAD_REQUEST, description = BAD_REQUEST_MSG),
+        @ApiResponse(responseCode = SERVER_ERROR, description = SERVER_ERROR_MSG),
+      })
+  @PostMapping(CLIENT_BASE_PATH)
+  public ResponseEntity<DefaultServerResponse<String, StandardError>> createClient(
+      @Valid @RequestBody final UserRequest userRequest) {
+    userApplicationService.createClient(userRequest);
     return ResponseEntity.status(USER_CREATED_SUCCESSFULLY.getHttpStatus())
         .body(new DefaultServerResponse<>(USER_CREATED_SUCCESSFULLY.getMessage(), null));
   }

@@ -10,4 +10,5 @@ public class RouterConst {
   public static final String LOGIN_PATH = "/login";
   public static final String EXISTS_PATH = "/exists";
   public static final String EMPLOYEE_BASE_PATH = "/employee";
+  public static final String CLIENT_BASE_PATH = "/client";
 }
