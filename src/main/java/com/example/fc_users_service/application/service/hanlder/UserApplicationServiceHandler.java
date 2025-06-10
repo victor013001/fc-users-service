@@ -43,6 +43,12 @@ public class UserApplicationServiceHandler implements UserApplicationService {
         userMapper.toModel(userRequest, encodedPassword), Roles.EMPLOYEE.getValue());
   }
 
+  @Override
+  public void createClient(UserRequest userRequest) {
+    String encodedPassword = passwordEncoder.encode(userRequest.password());
+    userService.saveUser(userMapper.toModel(userRequest, encodedPassword), Roles.CLIENT.getValue());
+  }
+
   private String getCurrentUserEmail() {
     return SecurityContextHolder.getContext().getAuthentication().getName();
   }

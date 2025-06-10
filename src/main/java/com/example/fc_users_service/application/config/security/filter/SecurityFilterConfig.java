@@ -1,10 +1,13 @@
 package com.example.fc_users_service.application.config.security.filter;
 
 import static com.example.fc_users_service.domain.constants.RouterConst.AUTH_BASE_PATH;
+import static com.example.fc_users_service.domain.constants.RouterConst.CLIENT_BASE_PATH;
+import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +33,8 @@ public class SecurityFilterConfig {
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(AUTH_BASE_PATH + "/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, USER_BASE_PATH + CLIENT_BASE_PATH)
                     .permitAll()
                     .anyRequest()
                     .authenticated())
