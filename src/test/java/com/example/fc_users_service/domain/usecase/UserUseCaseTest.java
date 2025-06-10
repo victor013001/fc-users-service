@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.fc_users_service.domain.enums.Roles;
 import com.example.fc_users_service.domain.exceptions.standard_exception.BadRequest;
+import com.example.fc_users_service.domain.exceptions.standard_exception.UserAlreadyExists;
 import com.example.fc_users_service.domain.spi.UserPersistencePort;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +59,7 @@ class UserUseCaseTest {
     when(userPersistencePort.existsByDocumentNumber(user.documentNumber())).thenReturn(false);
     when(userPersistencePort.existsByEmail(user.email())).thenReturn(true);
 
-    assertThrows(BadRequest.class, () -> userUseCase.saveUser(user, ROLE));
+    assertThrows(UserAlreadyExists.class, () -> userUseCase.saveUser(user, ROLE));
 
     verify(userPersistencePort).existsByDocumentNumber(user.documentNumber());
     verify(userPersistencePort).existsByEmail(user.email());
@@ -71,7 +72,7 @@ class UserUseCaseTest {
 
     when(userPersistencePort.existsByDocumentNumber(user.documentNumber())).thenReturn(true);
 
-    assertThrows(BadRequest.class, () -> userUseCase.saveUser(user, ROLE));
+    assertThrows(UserAlreadyExists.class, () -> userUseCase.saveUser(user, ROLE));
 
     verify(userPersistencePort, never()).existsByEmail(user.email());
     verify(userPersistencePort).existsByDocumentNumber(user.documentNumber());
@@ -103,6 +104,22 @@ class UserUseCaseTest {
     Boolean result = userUseCase.doesEmailMatchRoleId(landlordId, email, role);
 
     assertTrue(result);
+    verify(userPersistencePort).existsByIdAndRoleName(landlordId, role);
+    verify(userPersistencePort).existsByIdAndEmail(landlordId, email);
+  }
+
+  @Test
+  void doesEmailMatchLandlordId_Invalid() {
+    Long landlordId = 1L;
+    String email = "landlord@example.com";
+    String role = Roles.LANDLORD.getValue();
+
+    when(userPersistencePort.existsByIdAndRoleName(landlordId, role)).thenReturn(true);
+    when(userPersistencePort.existsByIdAndEmail(landlordId, email)).thenReturn(false);
+
+    Boolean result = userUseCase.doesEmailMatchRoleId(landlordId, email, role);
+
+    assertFalse(result);
     verify(userPersistencePort).existsByIdAndRoleName(landlordId, role);
     verify(userPersistencePort).existsByIdAndEmail(landlordId, email);
   }

@@ -8,4 +8,6 @@ public interface UserApplicationService {
   Boolean landlordExists(Long landlordId);
 
   Boolean doesEmailMatchLandlordId(Long landlordId);
+
+  void createEmployee(UserRequest userRequest);
 }

@@ -87,6 +87,7 @@ def jacocoExcludes = [
         '**/enums/**',
         '**/util/**',
         '**/mapper/**',
+        '**/security/**',
 ]
 
 def mainClassDirsProvider = layout.buildDirectory.dir("classes/java/main").map { dir ->
