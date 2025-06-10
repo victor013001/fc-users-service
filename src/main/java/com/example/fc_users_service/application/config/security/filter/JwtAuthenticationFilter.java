@@ -3,7 +3,7 @@ package com.example.fc_users_service.application.config.security.filter;
 import static com.example.fc_users_service.domain.constants.HeaderConst.AUTHORIZATION;
 import static com.example.fc_users_service.domain.constants.HeaderConst.BEARER;
 
-import com.example.fc_users_service.application.service.security.impl.JwtApplicationServiceImpl;
+import com.example.fc_users_service.application.service.security.JwtApplicationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtApplicationServiceImpl jwtService;
+  private final JwtApplicationService jwtService;
   private final UserDetailsService userDetailsService;
 
   @Override

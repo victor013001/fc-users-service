@@ -16,6 +16,5 @@ class FCUsersServiceApplicationTests {
   @Test
   void contextLoads() {
     // This method is intentionally left empty to verify that the Spring application context loads
-    System.out.println(passwordEncoder.encode("dummy"));
   }
 }

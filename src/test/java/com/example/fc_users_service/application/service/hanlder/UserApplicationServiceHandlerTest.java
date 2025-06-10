@@ -1,6 +1,7 @@
 package com.example.fc_users_service.application.service.hanlder;
 
 import static com.example.fc_users_service.util.data.UserRequestData.getValidUserRequest;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,5 +46,13 @@ class UserApplicationServiceHandlerTest {
         .saveUser(
             argThat(user -> user.password().equals(encodedPassword)),
             eq(Roles.LANDLORD.getValue()));
+  }
+
+  @Test
+  void landlordExists() {
+    var landlordId = 1L;
+    when(userService.userWithRoleExists(anyLong(), anyString())).thenReturn(true);
+    userApplicationServiceHandler.landlordExists(landlordId);
+    verify(userService).userWithRoleExists(landlordId, Roles.LANDLORD.getValue());
   }
 }

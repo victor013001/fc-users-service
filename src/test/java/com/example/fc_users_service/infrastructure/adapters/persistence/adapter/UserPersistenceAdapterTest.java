@@ -77,4 +77,17 @@ class UserPersistenceAdapterTest {
     assertFalse(userPersistenceAdapter.existsByDocumentNumber(document));
     verify(userRepository).existsByDocumentNumber(document.toString());
   }
+
+  @Test
+  void existsByIdAndRoleName_ShouldReturnTrue() {
+    Long userId = 1L;
+    String roleName = "LANDLORD";
+
+    when(userRepository.existsByIdAndRole_Name(userId, roleName)).thenReturn(true);
+
+    Boolean result = userPersistenceAdapter.existsByIdAndRoleName(userId, roleName);
+
+    assertTrue(result);
+    verify(userRepository).existsByIdAndRole_Name(userId, roleName);
+  }
 }

@@ -76,4 +76,17 @@ class UserUseCaseTest {
     verify(userPersistencePort).existsByDocumentNumber(user.documentNumber());
     verify(userPersistencePort, never()).saveUser(any(), anyString());
   }
+
+  @Test
+  void userWithRoleExists_ValidData() {
+    Long landlordId = 1L;
+    String role = "LANDLORD";
+
+    when(userPersistencePort.existsByIdAndRoleName(landlordId, role)).thenReturn(true);
+
+    Boolean result = userUseCase.userWithRoleExists(landlordId, role);
+
+    assertTrue(result);
+    verify(userPersistencePort).existsByIdAndRoleName(landlordId, role);
+  }
 }

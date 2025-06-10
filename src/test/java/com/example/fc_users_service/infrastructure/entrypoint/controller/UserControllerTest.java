@@ -1,11 +1,13 @@
 package com.example.fc_users_service.infrastructure.entrypoint.controller;
 
+import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
 import static com.example.fc_users_service.domain.enums.ServerResponses.USER_CREATED_SUCCESSFULLY;
 import static com.example.fc_users_service.util.data.UserRequestData.getInvalidUserRequest;
 import static com.example.fc_users_service.util.data.UserRequestData.getValidUserRequest;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,6 +23,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -71,5 +75,41 @@ public class UserControllerTest {
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void landlordExists_ReturnsTrue() throws Exception {
+    Long landlordId = 1L;
+
+    when(userApplicationService.landlordExists(landlordId)).thenReturn(true);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get(
+                    USER_BASE_PATH + LANDLORD_BASE_PATH + EXISTS_PATH + "/" + landlordId)
+                .with(
+                    SecurityMockMvcRequestPostProcessors.user("admin")
+                        .authorities(new SimpleGrantedAuthority("admin"))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").value(true))
+        .andExpect(jsonPath("$.error").doesNotExist());
+  }
+
+  @Test
+  public void landlordExists_ReturnsFalse() throws Exception {
+    Long landlordId = 2L;
+
+    when(userApplicationService.landlordExists(landlordId)).thenReturn(false);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get(
+                    USER_BASE_PATH + LANDLORD_BASE_PATH + EXISTS_PATH + "/" + landlordId)
+                .with(
+                    SecurityMockMvcRequestPostProcessors.user("admin")
+                        .authorities(new SimpleGrantedAuthority("admin"))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").value(false))
+        .andExpect(jsonPath("$.error").doesNotExist());
   }
 }

@@ -6,6 +6,7 @@ import static com.example.fc_users_service.domain.enums.ServerResponses.SERVER_E
 import com.example.fc_users_service.domain.exceptions.StandardError;
 import com.example.fc_users_service.domain.exceptions.StandardException;
 import com.example.fc_users_service.infrastructure.entrypoint.dto.DefaultServerResponse;
+import io.jsonwebtoken.security.SignatureException;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,16 @@ public class ControllerAdvisor {
     return ResponseEntity.badRequest()
         .body(
             new DefaultServerResponse<>(
-                null, buildServerStandardError(argumentNotValidException.getMessage())));
+                null, buildBadRequestStandardError(argumentNotValidException.getMessage())));
+  }
+
+  @ExceptionHandler(SignatureException.class)
+  protected ResponseEntity<DefaultServerResponse<Object, StandardError>> handleSignatureException(
+      SignatureException signatureException) {
+    return ResponseEntity.status(403)
+        .body(
+            new DefaultServerResponse<>(
+                null, buildForbiddenStandardError(signatureException.getMessage())));
   }
 
   private StandardError buildServerStandardError(String message) {
@@ -57,6 +67,15 @@ public class ControllerAdvisor {
 
   private StandardError buildBadRequestStandardError(String message) {
     log.error("{} Bad Request exception caught: {}", LOG_PREFIX, message);
+    return StandardError.builder()
+        .code(BAD_REQUEST.getCode())
+        .description(BAD_REQUEST.getMessage())
+        .timestamp(LocalDateTime.now())
+        .build();
+  }
+
+  private StandardError buildForbiddenStandardError(String message) {
+    log.error("{} Forbidden exception caught: {}", LOG_PREFIX, message);
     return StandardError.builder()
         .code(BAD_REQUEST.getCode())
         .description(BAD_REQUEST.getMessage())
