@@ -50,4 +50,16 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     log.info("{} Checking if document number: {} exists.", LOG_PREFIX, documentNumber);
     return userRepository.existsByDocumentNumber(String.valueOf(documentNumber));
   }
+
+  @Override
+  public Boolean existsByIdAndRoleName(Long userId, String roleName) {
+    log.info("{} Checking if user: {} exists and has role: {}.", LOG_PREFIX, userId, roleName);
+    return userRepository.existsByIdAndRole_Name(userId, roleName);
+  }
+
+  @Override
+  public boolean existsByIdAndEmail(Long userId, String userEmail) {
+    log.info("{} Checking if user: {} belongs to email: {}.", LOG_PREFIX, userId, userEmail);
+    return userRepository.existsByIdAndEmail(userId, userEmail);
+  }
 }

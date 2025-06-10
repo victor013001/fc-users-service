@@ -3,3 +3,5 @@ spring:
     name: FC Users Service
   profiles:
     active: ${ACTIVE_PROFILE:none}
+  jpa:
+    show-sql: true

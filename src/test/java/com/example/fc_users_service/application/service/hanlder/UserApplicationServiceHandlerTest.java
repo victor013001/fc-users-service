@@ -1,6 +1,8 @@
 package com.example.fc_users_service.application.service.hanlder;
 
 import static com.example.fc_users_service.util.data.UserRequestData.getValidUserRequest;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -17,6 +19,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +34,10 @@ class UserApplicationServiceHandlerTest {
   @Mock private PasswordEncoder passwordEncoder;
 
   @Mock private UserServicePort userService;
+
+  @Mock private Authentication auth;
+
+  @Mock private SecurityContext securityContext;
 
   @Test
   void createLandlord_ShouldEncodePasswordAndSaveUser() {
@@ -45,5 +54,31 @@ class UserApplicationServiceHandlerTest {
         .saveUser(
             argThat(user -> user.password().equals(encodedPassword)),
             eq(Roles.LANDLORD.getValue()));
+  }
+
+  @Test
+  void landlordExists() {
+    var landlordId = 1L;
+    when(userService.userWithRoleExists(anyLong(), anyString())).thenReturn(true);
+    userApplicationServiceHandler.landlordExists(landlordId);
+    verify(userService).userWithRoleExists(landlordId, Roles.LANDLORD.getValue());
+  }
+
+  @Test
+  void doesEmailMatchLandlordId_ShouldCallServiceWithCurrentEmailAndLandlordRole() {
+    Long landlordId = 1L;
+    String email = "test@example.com";
+
+    when(auth.getName()).thenReturn(email);
+    when(securityContext.getAuthentication()).thenReturn(auth);
+    SecurityContextHolder.setContext(securityContext);
+
+    when(userService.doesEmailMatchRoleId(landlordId, email, Roles.LANDLORD.getValue()))
+        .thenReturn(true);
+
+    Boolean result = userApplicationServiceHandler.doesEmailMatchLandlordId(landlordId);
+
+    assertTrue(result);
+    verify(userService).doesEmailMatchRoleId(landlordId, email, Roles.LANDLORD.getValue());
   }
 }

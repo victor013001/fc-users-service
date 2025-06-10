@@ -6,6 +6,7 @@ import com.example.fc_users_service.domain.api.UserServicePort;
 import com.example.fc_users_service.domain.enums.Roles;
 import com.example.fc_users_service.infrastructure.entrypoint.dto.UserRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -22,5 +23,20 @@ public class UserApplicationServiceHandler implements UserApplicationService {
     String encodedPassword = passwordEncoder.encode(userRequest.password());
     userService.saveUser(
         userMapper.toModel(userRequest, encodedPassword), Roles.LANDLORD.getValue());
+  }
+
+  @Override
+  public Boolean landlordExists(Long landlordId) {
+    return userService.userWithRoleExists(landlordId, Roles.LANDLORD.getValue());
+  }
+
+  @Override
+  public Boolean doesEmailMatchLandlordId(Long landlordId) {
+    return userService.doesEmailMatchRoleId(
+        landlordId, getCurrentUserEmail(), Roles.LANDLORD.getValue());
+  }
+
+  private String getCurrentUserEmail() {
+    return SecurityContextHolder.getContext().getAuthentication().getName();
   }
 }
