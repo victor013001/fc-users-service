@@ -112,4 +112,40 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.data").value(false))
         .andExpect(jsonPath("$.error").doesNotExist());
   }
+
+  @Test
+  public void doesLandlordBelongToEmail_ReturnsTrue() throws Exception {
+    Long landlordId = 1L;
+
+    when(userApplicationService.doesEmailMatchLandlordId(landlordId)).thenReturn(true);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get(
+                    USER_BASE_PATH + LANDLORD_BASE_PATH + "/" + landlordId + "/belongs")
+                .with(
+                    SecurityMockMvcRequestPostProcessors.user("landlordUser")
+                        .authorities(new SimpleGrantedAuthority("landlord"))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").value(true))
+        .andExpect(jsonPath("$.error").doesNotExist());
+  }
+
+  @Test
+  public void doesLandlordBelongToEmail_ReturnsFalse() throws Exception {
+    Long landlordId = 2L;
+
+    when(userApplicationService.doesEmailMatchLandlordId(landlordId)).thenReturn(false);
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get(
+                    USER_BASE_PATH + LANDLORD_BASE_PATH + "/" + landlordId + "/belongs")
+                .with(
+                    SecurityMockMvcRequestPostProcessors.user("landlordUser")
+                        .authorities(new SimpleGrantedAuthority("landlord"))))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").value(false))
+        .andExpect(jsonPath("$.error").doesNotExist());
+  }
 }

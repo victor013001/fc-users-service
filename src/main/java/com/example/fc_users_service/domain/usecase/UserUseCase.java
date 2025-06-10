@@ -24,8 +24,14 @@ public class UserUseCase implements UserServicePort {
   }
 
   @Override
-  public Boolean userWithRoleExists(Long landlordId, String value) {
-    return userPersistencePort.existsByIdAndRoleName(landlordId, value);
+  public Boolean userWithRoleExists(Long userId, String role) {
+    return userPersistencePort.existsByIdAndRoleName(userId, role);
+  }
+
+  @Override
+  public Boolean doesEmailMatchRoleId(Long userId, String currentUserEmail, String role) {
+    return userPersistencePort.existsByIdAndRoleName(userId, role)
+        && userPersistencePort.existsByIdAndEmail(userId, currentUserEmail);
   }
 
   private void validEmail(String email) {

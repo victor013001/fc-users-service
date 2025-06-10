@@ -6,4 +6,6 @@ public interface UserApplicationService {
   void createLandlord(UserRequest userRequest);
 
   Boolean landlordExists(Long landlordId);
+
+  Boolean doesEmailMatchLandlordId(Long landlordId);
 }

@@ -15,6 +15,7 @@ import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_P
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.SwaggerConst.CREATE_LANDLORD_OPERATION;
+import static com.example.fc_users_service.domain.constants.SwaggerConst.EMAIL_BELONGS_TO_LANDLORD;
 import static com.example.fc_users_service.domain.enums.ServerResponses.USER_CREATED_SUCCESSFULLY;
 
 import com.example.fc_users_service.application.service.UserApplicationService;
@@ -74,5 +75,22 @@ public class UserController {
       @PathVariable(name = "landlord_id") Long landlordId) {
     return ResponseEntity.status(OK_INT)
         .body(new DefaultServerResponse<>(userApplicationService.landlordExists(landlordId), null));
+  }
+
+  @Operation(summary = EMAIL_BELONGS_TO_LANDLORD)
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = OK, description = ""),
+        @ApiResponse(responseCode = BAD_REQUEST, description = BAD_REQUEST_MSG),
+        @ApiResponse(responseCode = SERVER_ERROR, description = SERVER_ERROR_MSG),
+      })
+  @GetMapping(LANDLORD_BASE_PATH + "/{landlord_id}/belongs")
+  @PreAuthorize("hasAuthority('landlord')")
+  public ResponseEntity<DefaultServerResponse<Boolean, StandardError>> doesLandlordBelongToEmail(
+      @PathVariable("landlord_id") Long landlordId) {
+    return ResponseEntity.status(OK_INT)
+        .body(
+            new DefaultServerResponse<>(
+                userApplicationService.doesEmailMatchLandlordId(landlordId), null));
   }
 }

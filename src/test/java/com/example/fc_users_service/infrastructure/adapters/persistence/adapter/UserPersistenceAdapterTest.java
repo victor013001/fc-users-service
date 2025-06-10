@@ -90,4 +90,17 @@ class UserPersistenceAdapterTest {
     assertTrue(result);
     verify(userRepository).existsByIdAndRole_Name(userId, roleName);
   }
+
+  @Test
+  void testExistsByIdAndEmail_ReturnsTrue() {
+    Long userId = 1L;
+    String email = "test@example.com";
+
+    when(userRepository.existsByIdAndEmail(userId, email)).thenReturn(true);
+
+    boolean result = userPersistenceAdapter.existsByIdAndEmail(userId, email);
+
+    assertTrue(result);
+    verify(userRepository).existsByIdAndEmail(userId, email);
+  }
 }

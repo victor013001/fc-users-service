@@ -10,4 +10,6 @@ public interface UserPersistencePort {
   boolean existsByDocumentNumber(Integer documentNumber);
 
   Boolean existsByIdAndRoleName(Long userId, String roleName);
+
+  boolean existsByIdAndEmail(Long userId, String userEmail);
 }
