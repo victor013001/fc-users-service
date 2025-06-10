@@ -36,6 +36,13 @@ public class UserApplicationServiceHandler implements UserApplicationService {
         landlordId, getCurrentUserEmail(), Roles.LANDLORD.getValue());
   }
 
+  @Override
+  public void createEmployee(UserRequest userRequest) {
+    String encodedPassword = passwordEncoder.encode(userRequest.password());
+    userService.saveUser(
+        userMapper.toModel(userRequest, encodedPassword), Roles.EMPLOYEE.getValue());
+  }
+
   private String getCurrentUserEmail() {
     return SecurityContextHolder.getContext().getAuthentication().getName();
   }

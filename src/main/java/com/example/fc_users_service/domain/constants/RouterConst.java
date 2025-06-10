@@ -9,4 +9,5 @@ public class RouterConst {
   public static final String AUTH_BASE_PATH = "/api/v1/auth";
   public static final String LOGIN_PATH = "/login";
   public static final String EXISTS_PATH = "/exists";
+  public static final String EMPLOYEE_BASE_PATH = "/employee";
 }

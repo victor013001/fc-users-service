@@ -81,4 +81,21 @@ class UserApplicationServiceHandlerTest {
     assertTrue(result);
     verify(userService).doesEmailMatchRoleId(landlordId, email, Roles.LANDLORD.getValue());
   }
+
+  @Test
+  void createEmployee_ShouldEncodePasswordAndSaveUser() {
+    var request = getValidUserRequest();
+    String encodedPassword = "encodedPassword";
+
+    when(passwordEncoder.encode(anyString())).thenReturn(encodedPassword);
+
+    userApplicationServiceHandler.createEmployee(request);
+
+    verify(passwordEncoder).encode(request.password());
+    verify(userMapper).toModel(request, encodedPassword);
+    verify(userService)
+        .saveUser(
+            argThat(user -> user.password().equals(encodedPassword)),
+            eq(Roles.EMPLOYEE.getValue()));
+  }
 }

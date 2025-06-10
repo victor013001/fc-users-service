@@ -11,6 +11,7 @@ import static com.example.fc_users_service.domain.constants.MsgConst.LANDLORD_FO
 import static com.example.fc_users_service.domain.constants.MsgConst.SERVER_ERROR_MSG;
 import static com.example.fc_users_service.domain.constants.MsgConst.USER_ALREADY_EXISTS_MSG;
 import static com.example.fc_users_service.domain.constants.MsgConst.USER_CREATED_SUCCESSFULLY_MSG;
+import static com.example.fc_users_service.domain.constants.RouterConst.EMPLOYEE_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
@@ -92,5 +93,22 @@ public class UserController {
         .body(
             new DefaultServerResponse<>(
                 userApplicationService.doesEmailMatchLandlordId(landlordId), null));
+  }
+
+  @Operation(summary = CREATE_LANDLORD_OPERATION)
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = CREATED, description = USER_CREATED_SUCCESSFULLY_MSG),
+        @ApiResponse(responseCode = CONFLICT, description = USER_ALREADY_EXISTS_MSG),
+        @ApiResponse(responseCode = BAD_REQUEST, description = BAD_REQUEST_MSG),
+        @ApiResponse(responseCode = SERVER_ERROR, description = SERVER_ERROR_MSG),
+      })
+  @PostMapping(EMPLOYEE_BASE_PATH)
+  @PreAuthorize("hasAuthority('landlord')")
+  public ResponseEntity<DefaultServerResponse<String, StandardError>> createEmployee(
+      @Valid @RequestBody final UserRequest userRequest) {
+    userApplicationService.createEmployee(userRequest);
+    return ResponseEntity.status(USER_CREATED_SUCCESSFULLY.getHttpStatus())
+        .body(new DefaultServerResponse<>(USER_CREATED_SUCCESSFULLY.getMessage(), null));
   }
 }
