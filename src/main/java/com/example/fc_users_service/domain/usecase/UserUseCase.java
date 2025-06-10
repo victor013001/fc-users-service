@@ -2,6 +2,7 @@ package com.example.fc_users_service.domain.usecase;
 
 import com.example.fc_users_service.domain.api.UserServicePort;
 import com.example.fc_users_service.domain.exceptions.standard_exception.BadRequest;
+import com.example.fc_users_service.domain.exceptions.standard_exception.UserAlreadyExists;
 import com.example.fc_users_service.domain.model.User;
 import com.example.fc_users_service.domain.spi.UserPersistencePort;
 import java.time.LocalDate;
@@ -22,15 +23,20 @@ public class UserUseCase implements UserServicePort {
     userPersistencePort.saveUser(user, roleName);
   }
 
+  @Override
+  public Boolean userWithRoleExists(Long landlordId, String value) {
+    return userPersistencePort.existsByIdAndRoleName(landlordId, value);
+  }
+
   private void validEmail(String email) {
     if (userPersistencePort.existsByEmail(email)) {
-      throw new BadRequest();
+      throw new UserAlreadyExists();
     }
   }
 
   private void validDocumentNumber(Integer documentNumber) {
     if (userPersistencePort.existsByDocumentNumber(documentNumber)) {
-      throw new BadRequest();
+      throw new UserAlreadyExists();
     }
   }
 

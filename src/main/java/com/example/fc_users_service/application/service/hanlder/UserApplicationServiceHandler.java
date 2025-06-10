@@ -23,4 +23,9 @@ public class UserApplicationServiceHandler implements UserApplicationService {
     userService.saveUser(
         userMapper.toModel(userRequest, encodedPassword), Roles.LANDLORD.getValue());
   }
+
+  @Override
+  public Boolean landlordExists(Long landlordId) {
+    return userService.userWithRoleExists(landlordId, Roles.LANDLORD.getValue());
+  }
 }
