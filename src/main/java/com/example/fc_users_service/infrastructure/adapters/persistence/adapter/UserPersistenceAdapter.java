@@ -62,4 +62,9 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     log.info("{} Checking if user: {} belongs to email: {}.", LOG_PREFIX, userId, userEmail);
     return userRepository.existsByIdAndEmail(userId, userEmail);
   }
+
+  @Override
+  public String getUserPhone(Long userId) {
+    return userRepository.getPhoneNumberById(userId);
+  }
 }

@@ -1,6 +1,7 @@
 package com.example.fc_users_service.application.service.hanlder;
 
 import static com.example.fc_users_service.util.data.UserRequestData.getValidUserRequest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -113,5 +114,15 @@ class UserApplicationServiceHandlerTest {
     verify(userService)
         .saveUser(
             argThat(user -> user.password().equals(encodedPassword)), eq(Roles.CLIENT.getValue()));
+  }
+
+  @Test
+  void getUserPhone() {
+    Long userId = 1L;
+    var phone = "+1234567890123";
+    when(userService.getUserPhone(anyLong())).thenReturn(phone);
+    var phoneResponse = userApplicationServiceHandler.getUserPhone(userId);
+    assertEquals(phone, phoneResponse);
+    verify(userService).getUserPhone(userId);
   }
 }

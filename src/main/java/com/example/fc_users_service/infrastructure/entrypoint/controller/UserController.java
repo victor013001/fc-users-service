@@ -15,11 +15,13 @@ import static com.example.fc_users_service.domain.constants.RouterConst.CLIENT_B
 import static com.example.fc_users_service.domain.constants.RouterConst.EMPLOYEE_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
+import static com.example.fc_users_service.domain.constants.RouterConst.PHONE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.SwaggerConst.CREATE_CLIENT_OPERATION;
 import static com.example.fc_users_service.domain.constants.SwaggerConst.CREATE_EMPLOYEE_OPERATION;
 import static com.example.fc_users_service.domain.constants.SwaggerConst.CREATE_LANDLORD_OPERATION;
 import static com.example.fc_users_service.domain.constants.SwaggerConst.EMAIL_BELONGS_TO_LANDLORD;
+import static com.example.fc_users_service.domain.constants.SwaggerConst.GET_USER_PHONE_OPERATION;
 import static com.example.fc_users_service.domain.enums.ServerResponses.USER_CREATED_SUCCESSFULLY;
 
 import com.example.fc_users_service.application.service.UserApplicationService;
@@ -129,5 +131,20 @@ public class UserController {
     userApplicationService.createClient(userRequest);
     return ResponseEntity.status(USER_CREATED_SUCCESSFULLY.getHttpStatus())
         .body(new DefaultServerResponse<>(USER_CREATED_SUCCESSFULLY.getMessage(), null));
+  }
+
+  @Operation(summary = GET_USER_PHONE_OPERATION)
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = OK, description = ""),
+        @ApiResponse(responseCode = BAD_REQUEST, description = BAD_REQUEST_MSG),
+        @ApiResponse(responseCode = SERVER_ERROR, description = SERVER_ERROR_MSG),
+      })
+  @GetMapping("/{user_id}" + PHONE_PATH)
+  @PreAuthorize("hasAuthority('employee')")
+  public ResponseEntity<DefaultServerResponse<String, StandardError>> getUserPhone(
+      @PathVariable(name = "user_id") Long userId) {
+    return ResponseEntity.status(OK_INT)
+        .body(new DefaultServerResponse<>(userApplicationService.getUserPhone(userId), null));
   }
 }

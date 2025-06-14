@@ -5,6 +5,7 @@ import static com.example.fc_users_service.util.data.UserData.getValidUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -122,5 +123,15 @@ class UserUseCaseTest {
     assertFalse(result);
     verify(userPersistencePort).existsByIdAndRoleName(landlordId, role);
     verify(userPersistencePort).existsByIdAndEmail(landlordId, email);
+  }
+
+  @Test
+  void getUserPhone() {
+    Long userId = 1L;
+    var phone = "+1234567890123";
+    when(userPersistencePort.getUserPhone(anyLong())).thenReturn(phone);
+    var phoneResponse = userUseCase.getUserPhone(userId);
+    assertEquals(phone, phoneResponse);
+    verify(userPersistencePort).getUserPhone(userId);
   }
 }

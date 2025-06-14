@@ -4,6 +4,7 @@ import static com.example.fc_users_service.util.data.RoleEntityData.getLandlordR
 import static com.example.fc_users_service.util.data.UserData.getValidUser;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -102,5 +103,15 @@ class UserPersistenceAdapterTest {
 
     assertTrue(result);
     verify(userRepository).existsByIdAndEmail(userId, email);
+  }
+
+  @Test
+  void getUserPhone() {
+    Long userId = 1L;
+    var phone = "+1234567890123";
+    when(userRepository.getPhoneNumberById(anyLong())).thenReturn(phone);
+    var phoneResponse = userPersistenceAdapter.getUserPhone(userId);
+    assertEquals(phone, phoneResponse);
+    verify(userRepository).getPhoneNumberById(userId);
   }
 }
