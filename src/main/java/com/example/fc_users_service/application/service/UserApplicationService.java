@@ -12,4 +12,6 @@ public interface UserApplicationService {
   void createEmployee(UserRequest userRequest);
 
   void createClient(UserRequest userRequest);
+
+  String getUserPhone(Long userId);
 }

@@ -49,6 +49,11 @@ public class UserApplicationServiceHandler implements UserApplicationService {
     userService.saveUser(userMapper.toModel(userRequest, encodedPassword), Roles.CLIENT.getValue());
   }
 
+  @Override
+  public String getUserPhone(Long userId) {
+    return userService.getUserPhone(userId);
+  }
+
   private String getCurrentUserEmail() {
     return SecurityContextHolder.getContext().getAuthentication().getName();
   }

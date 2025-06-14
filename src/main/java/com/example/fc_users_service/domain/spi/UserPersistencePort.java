@@ -12,4 +12,6 @@ public interface UserPersistencePort {
   Boolean existsByIdAndRoleName(Long userId, String roleName);
 
   boolean existsByIdAndEmail(Long userId, String userEmail);
+
+  String getUserPhone(Long userId);
 }

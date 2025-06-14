@@ -4,6 +4,7 @@ import static com.example.fc_users_service.domain.constants.RouterConst.CLIENT_B
 import static com.example.fc_users_service.domain.constants.RouterConst.EMPLOYEE_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
+import static com.example.fc_users_service.domain.constants.RouterConst.PHONE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
 import static com.example.fc_users_service.domain.enums.ServerResponses.USER_CREATED_SUCCESSFULLY;
 import static com.example.fc_users_service.util.data.UserRequestData.getInvalidUserRequest;
@@ -219,5 +220,19 @@ public class UserControllerTest {
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void getUserPhone_Success() throws Exception {
+    Long userId = 1L;
+    String phone = "3001234567";
+
+    Mockito.when(userApplicationService.getUserPhone(userId)).thenReturn(phone);
+
+    mockMvc
+        .perform(MockMvcRequestBuilders.get(USER_BASE_PATH + "/" + userId + PHONE_PATH))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").value(phone))
+        .andExpect(jsonPath("$.error").doesNotExist());
   }
 }

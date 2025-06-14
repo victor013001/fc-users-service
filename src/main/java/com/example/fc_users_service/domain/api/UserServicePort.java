@@ -8,4 +8,6 @@ public interface UserServicePort {
   Boolean userWithRoleExists(Long userId, String role);
 
   Boolean doesEmailMatchRoleId(Long userId, String currentUserEmail, String role);
+
+  String getUserPhone(Long userId);
 }
