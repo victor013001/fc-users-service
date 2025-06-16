@@ -9,9 +9,15 @@ public interface UserApplicationService {
 
   Boolean doesEmailMatchLandlordId(Long landlordId);
 
-  void createEmployee(UserRequest userRequest);
+  void createEmployee(UserRequest userRequest, Long restaurantId);
 
   void createClient(UserRequest userRequest);
 
   String getUserPhone(Long userId);
+
+  Long getUserId();
+
+  Long getEmployeeRestaurant();
+
+  Long getUserEmail(Long userId);
 }

@@ -9,7 +9,9 @@ import com.example.fc_users_service.domain.usecase.AuthUseCase;
 import com.example.fc_users_service.domain.usecase.UserUseCase;
 import com.example.fc_users_service.infrastructure.adapters.persistence.adapter.AuthPersistenceAdapter;
 import com.example.fc_users_service.infrastructure.adapters.persistence.adapter.UserPersistenceAdapter;
+import com.example.fc_users_service.infrastructure.adapters.persistence.mapper.EmployeeRestaurantEntityMapper;
 import com.example.fc_users_service.infrastructure.adapters.persistence.mapper.UserEntityMapper;
+import com.example.fc_users_service.infrastructure.adapters.persistence.repository.EmployeeRestaurantRepository;
 import com.example.fc_users_service.infrastructure.adapters.persistence.repository.RoleRepository;
 import com.example.fc_users_service.infrastructure.adapters.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +27,17 @@ public class UseCasesConfig {
   private final RoleRepository roleRepository;
   private final AuthenticationManager authenticationManager;
   private final JwtApplicationService jwtService;
+  private final EmployeeRestaurantRepository employeeRestaurantRepository;
+  private final EmployeeRestaurantEntityMapper employeeRestaurantEntityMapper;
 
   @Bean
   public UserPersistencePort userPersistencePort() {
-    return new UserPersistenceAdapter(userEntityMapper, userRepository, roleRepository);
+    return new UserPersistenceAdapter(
+        userEntityMapper,
+        userRepository,
+        roleRepository,
+        employeeRestaurantRepository,
+        employeeRestaurantEntityMapper);
   }
 
   @Bean

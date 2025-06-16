@@ -2,9 +2,13 @@ package com.example.fc_users_service.infrastructure.adapters.persistence.adapter
 
 import com.example.fc_users_service.domain.model.User;
 import com.example.fc_users_service.domain.spi.UserPersistencePort;
+import com.example.fc_users_service.infrastructure.adapters.persistence.entity.UserEntity;
+import com.example.fc_users_service.infrastructure.adapters.persistence.mapper.EmployeeRestaurantEntityMapper;
 import com.example.fc_users_service.infrastructure.adapters.persistence.mapper.UserEntityMapper;
+import com.example.fc_users_service.infrastructure.adapters.persistence.repository.EmployeeRestaurantRepository;
 import com.example.fc_users_service.infrastructure.adapters.persistence.repository.RoleRepository;
 import com.example.fc_users_service.infrastructure.adapters.persistence.repository.UserRepository;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,10 +23,12 @@ public class UserPersistenceAdapter implements UserPersistencePort {
   private final UserEntityMapper userEntityMapper;
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
+  private final EmployeeRestaurantRepository employeeRestaurantRepository;
+  private final EmployeeRestaurantEntityMapper employeeRestaurantEntityMapper;
 
   @Override
   @Transactional
-  public void saveUser(User user, String roleName) {
+  public void saveUser(User user, String roleName, Long restaurantId) {
     roleRepository
         .findByName(roleName)
         .map(
@@ -32,7 +38,12 @@ public class UserPersistenceAdapter implements UserPersistencePort {
                   LOG_PREFIX,
                   user.documentNumber(),
                   user.email());
-              return userRepository.save(userEntityMapper.toEntity(user, role));
+              UserEntity userEntity = userEntityMapper.toEntity(user, role);
+              userRepository.save(userEntity);
+              if (Objects.nonNull(restaurantId))
+                employeeRestaurantRepository.save(
+                    employeeRestaurantEntityMapper.toEntity(userEntity, restaurantId));
+              return userEntity;
             })
         .orElseThrow();
   }
@@ -66,5 +77,20 @@ public class UserPersistenceAdapter implements UserPersistencePort {
   @Override
   public String getUserPhone(Long userId) {
     return userRepository.getPhoneNumberById(userId);
+  }
+
+  @Override
+  public Long getUserId(String currentUserEmail) {
+    return userRepository.findIdByEmail(currentUserEmail);
+  }
+
+  @Override
+  public Long getUserRestaurant(String currentUserEmail) {
+    return employeeRestaurantRepository.findRestaurantIdByEmail(currentUserEmail);
+  }
+
+  @Override
+  public Long getUserEmail(Long userId) {
+    return userRepository.findEmailById(userId);
   }
 }

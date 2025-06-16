@@ -35,22 +35,22 @@ class UserUseCaseTest {
     when(userPersistencePort.existsByEmail(user.email())).thenReturn(false);
     when(userPersistencePort.existsByDocumentNumber(user.documentNumber())).thenReturn(false);
 
-    userUseCase.saveUser(user, ROLE);
+    userUseCase.saveUser(user, ROLE, null);
 
     verify(userPersistencePort).existsByEmail(user.email());
     verify(userPersistencePort).existsByDocumentNumber(user.documentNumber());
-    verify(userPersistencePort).saveUser(user, ROLE);
+    verify(userPersistencePort).saveUser(user, ROLE, null);
   }
 
   @Test
   void saveUser_Underage() {
     var user = getUnderageUser();
 
-    assertThrows(BadRequest.class, () -> userUseCase.saveUser(user, ROLE));
+    assertThrows(BadRequest.class, () -> userUseCase.saveUser(user, ROLE, null));
 
     verify(userPersistencePort, never()).existsByEmail(anyString());
     verify(userPersistencePort, never()).existsByDocumentNumber(anyInt());
-    verify(userPersistencePort, never()).saveUser(any(), anyString());
+    verify(userPersistencePort, never()).saveUser(any(), anyString(), anyLong());
   }
 
   @Test
@@ -60,11 +60,11 @@ class UserUseCaseTest {
     when(userPersistencePort.existsByDocumentNumber(user.documentNumber())).thenReturn(false);
     when(userPersistencePort.existsByEmail(user.email())).thenReturn(true);
 
-    assertThrows(UserAlreadyExists.class, () -> userUseCase.saveUser(user, ROLE));
+    assertThrows(UserAlreadyExists.class, () -> userUseCase.saveUser(user, ROLE, null));
 
     verify(userPersistencePort).existsByDocumentNumber(user.documentNumber());
     verify(userPersistencePort).existsByEmail(user.email());
-    verify(userPersistencePort, never()).saveUser(any(), anyString());
+    verify(userPersistencePort, never()).saveUser(any(), anyString(), anyLong());
   }
 
   @Test
@@ -73,11 +73,11 @@ class UserUseCaseTest {
 
     when(userPersistencePort.existsByDocumentNumber(user.documentNumber())).thenReturn(true);
 
-    assertThrows(UserAlreadyExists.class, () -> userUseCase.saveUser(user, ROLE));
+    assertThrows(UserAlreadyExists.class, () -> userUseCase.saveUser(user, ROLE, null));
 
     verify(userPersistencePort, never()).existsByEmail(user.email());
     verify(userPersistencePort).existsByDocumentNumber(user.documentNumber());
-    verify(userPersistencePort, never()).saveUser(any(), anyString());
+    verify(userPersistencePort, never()).saveUser(any(), anyString(), anyLong());
   }
 
   @Test

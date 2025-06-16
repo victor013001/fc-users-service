@@ -16,11 +16,11 @@ public class UserUseCase implements UserServicePort {
   private final int ADULT_AGE = 18;
 
   @Override
-  public void saveUser(User user, String roleName) {
+  public void saveUser(User user, String roleName, Long restaurantId) {
     validAdult(user.birthDate());
     validDocumentNumber(user.documentNumber());
     validEmail(user.email());
-    userPersistencePort.saveUser(user, roleName);
+    userPersistencePort.saveUser(user, roleName, restaurantId);
   }
 
   @Override
@@ -37,6 +37,21 @@ public class UserUseCase implements UserServicePort {
   @Override
   public String getUserPhone(Long userId) {
     return userPersistencePort.getUserPhone(userId);
+  }
+
+  @Override
+  public Long getUserId(String currentUserEmail) {
+    return userPersistencePort.getUserId(currentUserEmail);
+  }
+
+  @Override
+  public Long getEmployeeRestaurant(String currentUserEmail) {
+    return userPersistencePort.getUserRestaurant(currentUserEmail);
+  }
+
+  @Override
+  public Long getUserEmail(Long userId) {
+    return userPersistencePort.getUserEmail(userId);
   }
 
   private void validEmail(String email) {

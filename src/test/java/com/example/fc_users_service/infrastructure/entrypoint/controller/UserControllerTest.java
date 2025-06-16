@@ -5,11 +5,13 @@ import static com.example.fc_users_service.domain.constants.RouterConst.EMPLOYEE
 import static com.example.fc_users_service.domain.constants.RouterConst.EXISTS_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.LANDLORD_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.PHONE_PATH;
+import static com.example.fc_users_service.domain.constants.RouterConst.RESTAURANT_BASE_PATH;
 import static com.example.fc_users_service.domain.constants.RouterConst.USER_BASE_PATH;
 import static com.example.fc_users_service.domain.enums.ServerResponses.USER_CREATED_SUCCESSFULLY;
 import static com.example.fc_users_service.util.data.UserRequestData.getInvalidUserRequest;
 import static com.example.fc_users_service.util.data.UserRequestData.getValidUserRequest;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -158,11 +160,14 @@ public class UserControllerTest {
 
     String requestJson = objectMapper.writeValueAsString(userRequest);
 
-    Mockito.doNothing().when(userApplicationService).createEmployee(any(UserRequest.class));
+    Mockito.doNothing()
+        .when(userApplicationService)
+        .createEmployee(any(UserRequest.class), anyLong());
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post(USER_BASE_PATH + EMPLOYEE_BASE_PATH)
+            MockMvcRequestBuilders.post(
+                    USER_BASE_PATH + EMPLOYEE_BASE_PATH + RESTAURANT_BASE_PATH + "/1")
                 .with(
                     SecurityMockMvcRequestPostProcessors.user("landlordUser")
                         .authorities(new SimpleGrantedAuthority("landlord")))
@@ -181,7 +186,8 @@ public class UserControllerTest {
 
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post(USER_BASE_PATH + EMPLOYEE_BASE_PATH)
+            MockMvcRequestBuilders.post(
+                    USER_BASE_PATH + EMPLOYEE_BASE_PATH + RESTAURANT_BASE_PATH + "/1")
                 .with(
                     SecurityMockMvcRequestPostProcessors.user("landlordUser")
                         .authorities(new SimpleGrantedAuthority("landlord")))

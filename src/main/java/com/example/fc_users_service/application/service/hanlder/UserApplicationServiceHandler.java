@@ -22,7 +22,7 @@ public class UserApplicationServiceHandler implements UserApplicationService {
   public void createLandlord(UserRequest userRequest) {
     String encodedPassword = passwordEncoder.encode(userRequest.password());
     userService.saveUser(
-        userMapper.toModel(userRequest, encodedPassword), Roles.LANDLORD.getValue());
+        userMapper.toModel(userRequest, encodedPassword), Roles.LANDLORD.getValue(), null);
   }
 
   @Override
@@ -37,21 +37,37 @@ public class UserApplicationServiceHandler implements UserApplicationService {
   }
 
   @Override
-  public void createEmployee(UserRequest userRequest) {
+  public void createEmployee(UserRequest userRequest, Long restaurantId) {
     String encodedPassword = passwordEncoder.encode(userRequest.password());
     userService.saveUser(
-        userMapper.toModel(userRequest, encodedPassword), Roles.EMPLOYEE.getValue());
+        userMapper.toModel(userRequest, encodedPassword), Roles.EMPLOYEE.getValue(), restaurantId);
   }
 
   @Override
   public void createClient(UserRequest userRequest) {
     String encodedPassword = passwordEncoder.encode(userRequest.password());
-    userService.saveUser(userMapper.toModel(userRequest, encodedPassword), Roles.CLIENT.getValue());
+    userService.saveUser(
+        userMapper.toModel(userRequest, encodedPassword), Roles.CLIENT.getValue(), null);
   }
 
   @Override
   public String getUserPhone(Long userId) {
     return userService.getUserPhone(userId);
+  }
+
+  @Override
+  public Long getUserId() {
+    return userService.getUserId(getCurrentUserEmail());
+  }
+
+  @Override
+  public Long getEmployeeRestaurant() {
+    return userService.getEmployeeRestaurant(getCurrentUserEmail());
+  }
+
+  @Override
+  public Long getUserEmail(Long userId) {
+    return userService.getUserEmail(userId);
   }
 
   private String getCurrentUserEmail() {
