@@ -1,4 +1,4 @@
-package com.example.fc_users_service.infrastructure.entrypoint.dto;
+package com.example.fc_users_service.application.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

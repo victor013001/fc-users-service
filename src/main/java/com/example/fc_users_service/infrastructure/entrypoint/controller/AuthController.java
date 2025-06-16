@@ -9,10 +9,10 @@ import static com.example.fc_users_service.domain.constants.RouterConst.LOGIN_PA
 import static com.example.fc_users_service.domain.constants.SwaggerConst.AUTHENTICATE_OPERATION;
 import static com.example.fc_users_service.domain.enums.ServerResponses.AUTHENTICATED_SUCCESSFULLY;
 
+import com.example.fc_users_service.application.dto.AuthenticationRequest;
+import com.example.fc_users_service.application.dto.DefaultServerResponse;
 import com.example.fc_users_service.application.service.AuthApplicationService;
 import com.example.fc_users_service.domain.exceptions.StandardError;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.AuthenticationRequest;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.DefaultServerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

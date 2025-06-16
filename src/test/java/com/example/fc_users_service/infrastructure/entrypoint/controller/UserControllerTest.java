@@ -16,8 +16,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.fc_users_service.application.dto.UserRequest;
 import com.example.fc_users_service.application.service.UserApplicationService;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.UserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;

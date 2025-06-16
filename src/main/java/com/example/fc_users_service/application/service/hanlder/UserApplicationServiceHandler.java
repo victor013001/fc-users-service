@@ -1,10 +1,10 @@
 package com.example.fc_users_service.application.service.hanlder;
 
+import com.example.fc_users_service.application.dto.UserRequest;
 import com.example.fc_users_service.application.mapper.UserMapper;
 import com.example.fc_users_service.application.service.UserApplicationService;
 import com.example.fc_users_service.domain.api.UserServicePort;
 import com.example.fc_users_service.domain.enums.Roles;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -34,10 +34,10 @@ import static com.example.fc_users_service.domain.constants.SwaggerConst.GET_USE
 import static com.example.fc_users_service.domain.constants.SwaggerConst.GET_USER_PHONE_OPERATION;
 import static com.example.fc_users_service.domain.enums.ServerResponses.USER_CREATED_SUCCESSFULLY;
 
+import com.example.fc_users_service.application.dto.DefaultServerResponse;
+import com.example.fc_users_service.application.dto.UserRequest;
 import com.example.fc_users_service.application.service.UserApplicationService;
 import com.example.fc_users_service.domain.exceptions.StandardError;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.DefaultServerResponse;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.UserRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

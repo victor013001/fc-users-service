@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.fc_users_service.application.dto.AuthenticationRequest;
 import com.example.fc_users_service.domain.api.AuthServicePort;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.AuthenticationRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
