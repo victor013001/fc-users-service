@@ -32,7 +32,14 @@ public class SecurityFilterConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers(AUTH_BASE_PATH + "/**")
+                auth.requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/webjars/**")
+                    .permitAll()
+                    .requestMatchers(AUTH_BASE_PATH + "/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, USER_BASE_PATH + CLIENT_BASE_PATH)
                     .permitAll()

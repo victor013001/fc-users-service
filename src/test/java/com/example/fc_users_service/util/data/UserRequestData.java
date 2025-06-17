@@ -1,6 +1,6 @@
 package com.example.fc_users_service.util.data;
 
-import com.example.fc_users_service.infrastructure.entrypoint.dto.UserRequest;
+import com.example.fc_users_service.application.dto.UserRequest;
 import java.time.LocalDate;
 
 public class UserRequestData {

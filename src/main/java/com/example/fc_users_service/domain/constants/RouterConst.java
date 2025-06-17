@@ -10,6 +10,9 @@ public class RouterConst {
   public static final String LOGIN_PATH = "/login";
   public static final String EXISTS_PATH = "/exists";
   public static final String EMPLOYEE_BASE_PATH = "/employee";
+  public static final String RESTAURANT_BASE_PATH = "/restaurant";
   public static final String CLIENT_BASE_PATH = "/client";
   public static final String PHONE_PATH = "/phone";
+  public static final String EMAIL_BASE_PATH = "/email";
+  public static final String ID_BASE_PATH = "/id";
 }

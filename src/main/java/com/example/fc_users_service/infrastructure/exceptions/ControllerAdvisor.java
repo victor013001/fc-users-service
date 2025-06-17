@@ -3,9 +3,9 @@ package com.example.fc_users_service.infrastructure.exceptions;
 import static com.example.fc_users_service.domain.enums.ServerResponses.BAD_REQUEST;
 import static com.example.fc_users_service.domain.enums.ServerResponses.SERVER_ERROR;
 
+import com.example.fc_users_service.application.dto.DefaultServerResponse;
 import com.example.fc_users_service.domain.exceptions.StandardError;
 import com.example.fc_users_service.domain.exceptions.StandardException;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.DefaultServerResponse;
 import io.jsonwebtoken.security.SignatureException;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;

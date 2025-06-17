@@ -10,4 +10,7 @@ public class SwaggerConst {
   public static final String CREATE_EMPLOYEE_OPERATION = "Create new employee";
   public static final String CREATE_CLIENT_OPERATION = "Create new client";
   public static final String GET_USER_PHONE_OPERATION = "Get user phone";
+  public static final String GET_USER_ID_OPERATION = "Get user id";
+  public static final String GET_EMPLOYEE_RESTAURANT_OPERATION = "Get employee restaurant";
+  public static final String GET_USER_EMAIL_OPERATION = "Get user email";
 }

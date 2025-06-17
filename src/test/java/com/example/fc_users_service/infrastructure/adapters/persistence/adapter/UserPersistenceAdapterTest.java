@@ -44,7 +44,7 @@ class UserPersistenceAdapterTest {
     when(roleRepository.findByName(roleName)).thenReturn(Optional.of(role));
     when(userRepository.save(any(UserEntity.class))).thenReturn(UserEntity.builder().build());
 
-    userPersistenceAdapter.saveUser(user, roleName);
+    userPersistenceAdapter.saveUser(user, roleName, null);
 
     verify(roleRepository).findByName(roleName);
     verify(userEntityMapper).toEntity(user, role);
@@ -58,7 +58,7 @@ class UserPersistenceAdapterTest {
     when(roleRepository.findByName(anyString())).thenReturn(Optional.empty());
 
     assertThrows(
-        NoSuchElementException.class, () -> userPersistenceAdapter.saveUser(user, "NO_ROLE"));
+        NoSuchElementException.class, () -> userPersistenceAdapter.saveUser(user, "NO_ROLE", null));
   }
 
   @Test

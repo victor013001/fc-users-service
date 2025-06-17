@@ -1,8 +1,8 @@
 package com.example.fc_users_service.application.service.hanlder;
 
+import com.example.fc_users_service.application.dto.AuthenticationRequest;
 import com.example.fc_users_service.application.service.AuthApplicationService;
 import com.example.fc_users_service.domain.api.AuthServicePort;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

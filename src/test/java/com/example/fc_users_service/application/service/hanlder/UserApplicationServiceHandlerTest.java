@@ -3,6 +3,7 @@ package com.example.fc_users_service.application.service.hanlder;
 import static com.example.fc_users_service.util.data.UserRequestData.getValidUserRequest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -54,7 +55,8 @@ class UserApplicationServiceHandlerTest {
     verify(userService)
         .saveUser(
             argThat(user -> user.password().equals(encodedPassword)),
-            eq(Roles.LANDLORD.getValue()));
+            eq(Roles.LANDLORD.getValue()),
+            any());
   }
 
   @Test
@@ -87,17 +89,19 @@ class UserApplicationServiceHandlerTest {
   void createEmployee_ShouldEncodePasswordAndSaveUser() {
     var request = getValidUserRequest();
     String encodedPassword = "encodedPassword";
+    var restaurantId = 1L;
 
     when(passwordEncoder.encode(anyString())).thenReturn(encodedPassword);
 
-    userApplicationServiceHandler.createEmployee(request);
+    userApplicationServiceHandler.createEmployee(request, restaurantId);
 
     verify(passwordEncoder).encode(request.password());
     verify(userMapper).toModel(request, encodedPassword);
     verify(userService)
         .saveUser(
             argThat(user -> user.password().equals(encodedPassword)),
-            eq(Roles.EMPLOYEE.getValue()));
+            eq(Roles.EMPLOYEE.getValue()),
+            anyLong());
   }
 
   @Test
@@ -113,7 +117,9 @@ class UserApplicationServiceHandlerTest {
     verify(userMapper).toModel(request, encodedPassword);
     verify(userService)
         .saveUser(
-            argThat(user -> user.password().equals(encodedPassword)), eq(Roles.CLIENT.getValue()));
+            argThat(user -> user.password().equals(encodedPassword)),
+            eq(Roles.CLIENT.getValue()),
+            any());
   }
 
   @Test

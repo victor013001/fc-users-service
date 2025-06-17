@@ -1,7 +1,7 @@
 package com.example.fc_users_service.application.mapper;
 
+import com.example.fc_users_service.application.dto.UserRequest;
 import com.example.fc_users_service.domain.model.User;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.UserRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

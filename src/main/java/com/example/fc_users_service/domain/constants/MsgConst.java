@@ -13,4 +13,8 @@ public class MsgConst {
       "An unexpected server error occurred. Please try again later.";
   public static final String AUTHENTICATED_SUCCESSFULLY_MSG = "Authenticated successfully.";
   public static final String LANDLORD_FOUND_MSG = "Flag if landlord was found.";
+  public static final String USER_PHONE_MSG = "User phone response";
+  public static final String USER_ID_MSG = "User id response";
+  public static final String EMPLOYEE_RESTAURANT_MSG = "Employee restaurant response";
+  public static final String USER_EMAIL_MSG = "User email response";
 }

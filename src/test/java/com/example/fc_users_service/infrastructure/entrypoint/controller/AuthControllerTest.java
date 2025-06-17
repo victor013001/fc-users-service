@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.fc_users_service.application.dto.AuthenticationRequest;
 import com.example.fc_users_service.application.service.AuthApplicationService;
-import com.example.fc_users_service.infrastructure.entrypoint.dto.AuthenticationRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
